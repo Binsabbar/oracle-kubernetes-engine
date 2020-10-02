@@ -1,6 +1,10 @@
 output "network" {
   value = {
-    private = module.network.private_subnets
-    public = module.network.public_subnets
+    private = { for key, value in module.network.private_subnets : key => value.cidr_block }
+    public  = { for key, value in module.network.public_subnets : key => value.cidr_block }
   }
+}
+
+output "networks_sg" {
+  value = module.network_secuirty_groups.networks_sg
 }
