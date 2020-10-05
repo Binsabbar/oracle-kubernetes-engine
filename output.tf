@@ -8,3 +8,7 @@ output "network" {
 output "networks_sg" {
   value = module.network_secuirty_groups.networks_sg
 }
+
+output "kube_config" {
+  value = module.kubernetes.kube_config
+}

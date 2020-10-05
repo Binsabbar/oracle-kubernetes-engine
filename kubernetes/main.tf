@@ -29,18 +29,8 @@ resource "oci_containerengine_node_pool" "node_pool" {
     }
   }
 
-  node_shape_config {
-    ocpus = local.node_config["${var.cluster_env}"].ocpus
-  }
-
   node_source_details {
-    image_id    = local.images_ids.ubuntu_20
+    image_id    = local.images_ids.oracle_linux_7
     source_type = "IMAGE"
-  }
-}
-
-locals {
-  images_ids = {
-    ubuntu_20 = "ocid1.image.oc1.me-jeddah-1.aaaaaaaay5jjjjj5bv2hh5553oi2ljo7nc36dxhx75sarcecs5ozlu374lja"
   }
 }
