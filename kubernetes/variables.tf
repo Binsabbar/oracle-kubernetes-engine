@@ -31,6 +31,11 @@ variable "availability_domain" {
   type = string
 }
 
-variable "subnet_id" {
-  type = string
+variable "node_pools" {
+  type = map(object({
+    shape     = string
+    size      = number
+    labels    = map(string)
+    subnet_id = string
+  }))
 }

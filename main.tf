@@ -76,5 +76,19 @@ module "kubernetes" {
   lb_subnet_ids               = [module.network.private_subnets["k8s"].id]
   node_pool_ssh_public_key    = var.jumpbox_autherized_keys
   availability_domain         = data.oci_identity_availability_domain.ad_1.name
-  subnet_id                   = module.network.private_subnets["kubernetes"].id
+
+  node_pools = {
+    "small-pool" = {
+      shape     = "VM.Standard.E2.1"
+      size      = 2
+      labels    = {"size": "small"}
+      subnet_id = module.network.private_subnets["kubernetes"].id
+    },
+    "large-pool" = {
+      shape     = "VM.Standard2.1"
+      size      = 2
+      labels    = {"size": "large"}
+      subnet_id = module.network.private_subnets["kubernetes"].id
+    }
+  }
 }

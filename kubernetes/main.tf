@@ -14,18 +14,27 @@ resource "oci_containerengine_cluster" "cluster" {
 }
 
 resource "oci_containerengine_node_pool" "node_pool" {
-  cluster_id         = oci_containerengine_cluster.cluster.id
-  compartment_id     = var.compartment_id
-  kubernetes_version = local.node_config["${var.cluster_env}"].k8s_version
-  name               = "${var.cluster_env} node pool"
-  node_shape         = local.node_config["${var.cluster_env}"].shape
-  ssh_public_key     = var.node_pool_ssh_public_key
+  for_each = var.node_pools
+
+  cluster_id          = oci_containerengine_cluster.cluster.id
+  compartment_id      = var.compartment_id
+  kubernetes_version  = local.node_config["${var.cluster_env}"].k8s_version
+  name                = "${each.key} node pool"
+  node_shape          = each.value.shape
+  ssh_public_key      = var.node_pool_ssh_public_key
+  dynamic "initial_node_labels" {
+    for_each = each.value.labels
+    content {
+      key = initial_node_labels.key
+      value = initial_node_labels.value
+    }
+  }
 
   node_config_details {
-    size = local.node_config["${var.cluster_env}"].size
+    size = each.value.size
     placement_configs {
       availability_domain = var.availability_domain
-      subnet_id           = var.subnet_id
+      subnet_id           = each.value.subnet_id
     }
   }
 
