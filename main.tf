@@ -19,6 +19,10 @@ module "network" {
       cidr_block        = "192.168.11.0/24"
       security_list_ids = []
     }
+    "k8s" = {
+      cidr_block        = "192.168.12.0/24"
+      security_list_ids = []
+    }
   }
 
   public_subnets = {
@@ -59,4 +63,18 @@ module "network_secuirty_groups" {
       }
     }
   }
+}
+
+module "kubernetes" {
+  source = "./kubernetes"
+
+  vcn_id                      = module.network.vcn.id
+  compartment_id              = oci_identity_compartment.compartment.id
+  cluster_name                = "kubernetes-poc-dev"
+  cluster_env                 = "dev"
+  enable_kubernetes_dashboard = true
+  lb_subnet_ids               = [module.network.private_subnets["k8s"].id]
+  node_pool_ssh_public_key    = var.jumpbox_autherized_keys
+  availability_domain         = data.oci_identity_availability_domain.ad_1.name
+  subnet_id                   = module.network.private_subnets["kubernetes"].id
 }
