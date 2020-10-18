@@ -1,6 +1,10 @@
 # oracle-kubernetes-engine
 Playground for configuring and setting up Kubernetes in Oracle Cloud using Terraform
 
+## Getting Started
+1. pass in the required variables as specified in `variables.tf` in a file called `.auto.tfvars`.
+2. Remove `configurations.tf`Or update it to point to your own account in Terraform.
+3. run `terraform apply`
 
 ## Setup:
 The repo will create the following:
@@ -17,6 +21,3 @@ The repo will create the following:
     1. `ssh_access_public`: allows incoming connections to port 22 from safe ips
     2. `private_subnets`: allow vcn internal connection and outgoing connection to public via nat_gateway.
 
-
-## Getting Started
-pass in the required variables as specified in `variables.tf` in a file called `.auto.tfvars`, then run `terraform apply`
